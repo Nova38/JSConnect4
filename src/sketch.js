@@ -399,7 +399,7 @@ board.dropPiece = (player, col) => {
 		title.textContent = "Select a different colum";
 		title.style.color = "crimson";
 	} else {
-		title.textContent = "Press a button to drop a token";
+		title.textContent = "Press a button or a number key to drop a token";
 		title.style.color = "black";
 
 		//drop the pice to the button of the col
