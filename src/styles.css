@@ -1,0 +1,54 @@
+canvas {
+	/* border: 0.5px solid black; */
+}
+
+.center {
+	padding-left: 0;
+	padding-right: 0;
+	margin-left: auto;
+	margin-right: auto;
+	display: block;
+	width: 800px;
+}
+
+.wrapper {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.colButton {
+	padding: 0px 5px 0px 0px;
+}
+
+button {
+	/* font-size: 16px; */
+	text-align: center;
+	border: 1px solid #969696;
+	background-color: hsla(0, 0%, 100%, 0.5);
+	padding: 0px 22.5px 0px;
+	/* text-decoration: none; */
+	/* display: inline-block; */
+}
+button:hover {
+	background-color: deepskyblue; /* Green */
+}
+
+.p5Canvas {
+	padding-top: 0;
+	padding-left: 0;
+	padding-right: 0;
+	margin-left: auto;
+	margin-right: auto;
+	display: block;
+}
+
+#title {
+	color: black;
+	text-align: center;
+}
+
+#player {
+	text-align: center;
+	color: rgb(255, 127, 80);
+}
