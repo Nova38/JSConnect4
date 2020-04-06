@@ -43,6 +43,14 @@ button:hover {
 	display: block;
 }
 
+#pageTitle {
+	text-align: center;
+}
+
+#github {
+	text-align: center;
+}
+
 #title {
 	color: black;
 	text-align: center;
