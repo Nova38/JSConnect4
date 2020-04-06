@@ -56,8 +56,16 @@ function draw() {
 }
 
 board.reset = () => {
-	createCanvas(maxWidth, maxHight);
+	//clear the turn
 
+	Object.assign(board, {
+		turn: 0,
+		over: false,
+		tie: false,
+		playerTurn: 1,
+	});
+
+	createCanvas(maxWidth, maxHight);
 	board.over = false;
 	for (let row = 0; row < board.rows; row++) {
 		board.tiles[row] = [];
@@ -146,13 +154,13 @@ board.drawGameBoard = () => {
 board.checkWin = (player, row, col) => {
 	console.log("Player #", player);
 	console.log("Row: ", row);
-	console.log("Colum: ", col);
+	console.log("Column: ", col);
 
 	//Win checker
 	let horizontal = board.checkHorizontal(player, row, col);
-	let vertical = board.checkVertical(player, row, col);
-	let L2RDiagonal = board.checkL2RDiagonal(player, row, col);
-	let R2LDiagonal = board.checkR2LDiagonal(player, row, col);
+	let vertical = false; //board.checkVertical(player, row, col);
+	let L2RDiagonal = false; //board.checkL2RDiagonal(player, row, col);
+	let R2LDiagonal = false; //board.checkR2LDiagonal(player, row, col);
 
 	if (vertical || horizontal || L2RDiagonal || R2LDiagonal) {
 		board.over = true;
@@ -164,7 +172,12 @@ board.checkWin = (player, row, col) => {
 	}
 };
 
-board.isTie = () => {};
+board.isTie = () => {
+	if (board.turn >= board.rows * board.cols) {
+		board.tie = true;
+		board.over = true;
+	}
+};
 
 board.checkHorizontal = (player, row, col) => {
 	// Horizontal
@@ -172,12 +185,11 @@ board.checkHorizontal = (player, row, col) => {
 	let mLeft = col - 4 > 0 ? col - 4 : 0;
 
 	let pRight = 0;
-	let mRight =
-		col + 4 < board.tiles[0].length ? col + 4 : board.tiles[0].length - 1;
+	let mRight = col + 4 < board.cols ? col + 4 : board.cols - 1;
 
 	console.log("Left Max Col: ", mLeft);
 	console.log("Right Max col: ", mRight);
-
+	console.log("Col+1: ", col + 1);
 	// Left Count
 	console.log("Left Count");
 	for (let j = col - 1; j >= mLeft; j--) {
@@ -369,11 +381,16 @@ board.gameOver = (player) => {
 	let title = document.querySelector("#title");
 	let playerText = document.querySelector("#player");
 
-	title.textContent = "Player " + player + " Has Won!!";
-	title.style.color = "green";
-
 	playerText.textContent = "Press any button to continue";
 	playerText.style.color = "crimson";
+
+	if (board.tie) {
+		title.textContent = "A Tie Has Occurred";
+		title.style.color = "blue";
+	} else {
+		title.textContent = "Player " + player + " Has Won!!";
+		title.style.color = "green";
+	}
 };
 
 board.dropPiece = (player, col) => {
@@ -393,7 +410,7 @@ board.dropPiece = (player, col) => {
 				console.log(player);
 				board.tiles[row][col] = player;
 				board.turn++;
-				board.checkWin(player, row, col);
+				board.checkWin(int(player), int(row), int(col));
 				board.isTie();
 				break;
 			}
