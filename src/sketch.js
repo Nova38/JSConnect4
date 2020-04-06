@@ -158,9 +158,9 @@ board.checkWin = (player, row, col) => {
 
 	//Win checker
 	let horizontal = board.checkHorizontal(player, row, col);
-	let vertical = false; //board.checkVertical(player, row, col);
-	let L2RDiagonal = false; //board.checkL2RDiagonal(player, row, col);
-	let R2LDiagonal = false; //board.checkR2LDiagonal(player, row, col);
+	let vertical = board.checkVertical(player, row, col);
+	let L2RDiagonal = board.checkL2RDiagonal(player, row, col);
+	let R2LDiagonal = board.checkR2LDiagonal(player, row, col);
 
 	if (vertical || horizontal || L2RDiagonal || R2LDiagonal) {
 		board.over = true;
@@ -228,7 +228,7 @@ board.checkVertical = (player, row, col) => {
 	let mUp = row - 4 >= 0 ? row - 4 : 0;
 
 	let pDown = 0;
-	let mDown = row + 4 < board.tiles.length ? row + 4 : board.tiles.length - 1;
+	let mDown = row + 4 < board.rows ? row + 4 : board.rows - 1;
 
 	console.log("Upper Max Row: ", mUp);
 	console.log("Lower Max Row: ", mDown);
@@ -271,8 +271,7 @@ board.checkL2RDiagonal = (player, row, col) => {
 
 	let mLeft = col - 4 > 0 ? col - 4 : 0;
 
-	let mRight =
-		col + 4 < board.tiles[0].length ? col + 4 : board.tiles[0].length - 1;
+	let mRight = col + 4 < board.cols ? col + 4 : board.cols - 1;
 
 	// Left Up Count
 	console.log("Up and Left Count");
@@ -328,8 +327,7 @@ board.checkR2LDiagonal = (player, row, col) => {
 
 	let mLeft = col - 4 > 0 ? col - 4 : 0;
 
-	let mRight =
-		col + 4 < board.tiles[0].length ? col + 4 : board.tiles[0].length - 1;
+	let mRight = col + 4 < board.cols ? col + 4 : board.cols - 1;
 
 	// Right Up Count
 	console.log("Up and Right Count");
