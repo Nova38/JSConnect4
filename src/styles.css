@@ -22,11 +22,11 @@ canvas {
 }
 
 button {
-	/* font-size: 16px; */
+	font-size: 16px;
 	text-align: center;
-	border: 1px solid #969696;
+	border: 2px solid #969696;
 	background-color: hsla(0, 0%, 100%, 0.5);
-	padding: 0px 22.5px 0px;
+	padding: 10px 35.5px 10px;
 	/* text-decoration: none; */
 	/* display: inline-block; */
 }
