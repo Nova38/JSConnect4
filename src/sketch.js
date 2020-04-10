@@ -1,3 +1,24 @@
+/**
+ * @file Sketch.js
+ * @author Thomas Atkins (Thomas.Atkins@ku.edu)
+ * @brief A Javascript implication of Connect 4 made for EECS 368 at KU
+ * @version 1.0
+ * @date 4/10/2020
+ *
+ * @copyright Copyright (c) 2020
+ *
+ *
+ *
+ * Notes:
+ * 		- The default connect four game is a 6 by 7 board with 2 players, the code bellow is configured for this set up. A goal
+ * 			that I kept in mind was to try and make those variables and the game board that they create as dynamic as i could in
+ * 			most places. Currently the code should work with changes to the number of rows or cols, to drop pice with more than
+ * 			7 cols but less than 9 cols only keyboard keys function. To make it more dynamic I would need to just have the javascript
+ * 			create the button elements on the fly. If I update this project in the future I will add the ability to change the number
+ * 			of cols via a drop down.
+ *
+ */
+
 //set up the game board
 let board = {
 	tiles: [],
@@ -29,17 +50,9 @@ board.maxY = board.spacing * (board.rows + 0) + board.gab / 2;
 let maxHight = board.maxY + board.gab / 2;
 let maxWidth = board.maxX + board.gab / 2; //(board.rows + 1) * board.spacing + board.gab;
 
+// First time run set up
 function setup() {
 	board.reset();
-	// createCanvas(maxWidth, maxHight);
-	// board.tiles = [
-	// 	[0, 0, 0, 0, 0, 0, 0],
-	// 	[0, 0, 0, 0, 0, 0, 0],
-	// 	[0, 0, 0, 0, 0, 0, 0],
-	// 	[0, 0, 0, 0, 0, 0, 0],
-	// 	[0, 0, 0, 0, 0, 0, 0],
-	// 	[0, 0, 0, 0, 0, 0, 0]
-	// ];
 
 	colors = {
 		dropRow: color(150),
@@ -51,13 +64,16 @@ function setup() {
 	};
 }
 
+// A P5 function that facilitate redrawing the canvas
 function draw() {
 	board.drawGameBoard();
 }
 
+//Clear all stored state in-order to set up initial state or reset the board for a new game
 board.reset = () => {
 	//clear the turn
 
+	//reset the board state
 	Object.assign(board, {
 		turn: 0,
 		over: false,
@@ -65,8 +81,10 @@ board.reset = () => {
 		playerTurn: 1,
 	});
 
+	// Recreate the canvas
 	createCanvas(maxWidth, maxHight);
-	board.over = false;
+	board;
+	// Regenerate the game board
 	for (let row = 0; row < board.rows; row++) {
 		board.tiles[row] = [];
 		for (let col = 0; col < board.cols; col++) {
@@ -74,6 +92,7 @@ board.reset = () => {
 		}
 	}
 
+	// Reset the messages to the players
 	let title = document.querySelector("#title");
 	title.textContent = "Press a button or a number key to drop a token";
 	title.style.color = "black";
@@ -83,6 +102,7 @@ board.reset = () => {
 	playerText.style.color = colors.player1;
 };
 
+// Draw the outer boarder and the gird
 board.drawBoarder = () => {
 	stroke(colors.boarder);
 
@@ -151,17 +171,20 @@ board.drawGameBoard = () => {
 	}
 };
 
+// Function to check if a win condition has been met
+// Only checks win conditions that could occur from the last dropped piece
 board.checkWin = (player, row, col) => {
 	console.log("Player #", player);
 	console.log("Row: ", row);
 	console.log("Column: ", col);
 
-	//Win checker
+	// Check if a win condition has happened in any given direction
 	let horizontal = board.checkHorizontal(player, row, col);
 	let vertical = board.checkVertical(player, row, col);
 	let L2RDiagonal = board.checkL2RDiagonal(player, row, col);
 	let R2LDiagonal = board.checkR2LDiagonal(player, row, col);
 
+	// If any of the directions is true then the a win condition has occurred
 	if (vertical || horizontal || L2RDiagonal || R2LDiagonal) {
 		board.over = true;
 	}
@@ -172,6 +195,7 @@ board.checkWin = (player, row, col) => {
 	}
 };
 
+// Checks if the a tie has occurs
 board.isTie = () => {
 	if (board.turn >= board.rows * board.cols) {
 		board.tie = true;
@@ -179,6 +203,7 @@ board.isTie = () => {
 	}
 };
 
+// Checks if there is a win in the horizontal direction
 board.checkHorizontal = (player, row, col) => {
 	// Horizontal
 	let pLeft = 0;
@@ -190,6 +215,7 @@ board.checkHorizontal = (player, row, col) => {
 	console.log("Left Max Col: ", mLeft);
 	console.log("Right Max col: ", mRight);
 	console.log("Col+1: ", col + 1);
+
 	// Left Count
 	console.log("Left Count");
 	for (let j = col - 1; j >= mLeft; j--) {
@@ -219,9 +245,11 @@ board.checkHorizontal = (player, row, col) => {
 	console.log("Pieces to the Right: ", pRight);
 	console.log("Number of Horizontal Pieces = ", pRight + pLeft);
 
+	// If their are 3 + the starting piece in this direction then there are 4 in a row.
 	return pLeft + pRight >= 3;
 };
 
+// Checks if there is a win in the Vertical direction
 board.checkVertical = (player, row, col) => {
 	// Vertical
 	let pUp = 0;
@@ -261,9 +289,12 @@ board.checkVertical = (player, row, col) => {
 	}
 	console.log("Pieces below: ", pDown);
 	console.log("Number of Vertical Pieces = ", pUp + pDown);
+
+	// If their are 3 + the starting piece in this direction then there are 4 in a row.
 	return pUp + pDown >= 3;
 };
 
+// Checks if there is a win in the diagonal starting in the top left to bottom right direction
 board.checkL2RDiagonal = (player, row, col) => {
 	// Diagonal L2R
 	let pUL2R = 0;
@@ -317,9 +348,11 @@ board.checkL2RDiagonal = (player, row, col) => {
 
 	console.log("Number of L2R Diagonal Pieces = ", pUL2R + pDL2R);
 
+	// If their are 3 + the starting piece in this direction then there are 4 in a row.
 	return pUL2R + pDL2R >= 3;
 };
 
+// Checks if there is a win in the diagonal starting in the top right to bottom left direction
 board.checkR2LDiagonal = (player, row, col) => {
 	// Diagonal L2R
 	let pDR2L = 0;
@@ -372,16 +405,20 @@ board.checkR2LDiagonal = (player, row, col) => {
 
 	console.log("Number of L2R Diagonal Pieces = ", pDR2L + pUR2L);
 
+	// If their are 3 + the starting piece in this direction then there are 4 in a row.
 	return pDR2L + pUR2L >= 3;
 };
 
+// Set the game over message and announce the winner
 board.gameOver = (player) => {
 	let title = document.querySelector("#title");
 	let playerText = document.querySelector("#player");
 
+	// Instruct user how to continue
 	playerText.textContent = "Press any button to continue";
 	playerText.style.color = "crimson";
 
+	//Checks if their is a winner
 	if (board.tie) {
 		title.textContent = "A Tie Has Occurred";
 		title.style.color = "blue";
@@ -391,6 +428,9 @@ board.gameOver = (player) => {
 	}
 };
 
+// This is the turn function
+// It handles the updating of the state of the board and
+// The checking of win conditions
 board.dropPiece = (player, col) => {
 	let title = document.querySelector("#title");
 	let playerText = document.querySelector("#player");
@@ -402,18 +442,21 @@ board.dropPiece = (player, col) => {
 		title.textContent = "Press a button or a number key to drop a token";
 		title.style.color = "black";
 
-		//drop the pice to the button of the col
+		//drop the pice to the bottom of the col
 		for (let row = board.rows - 1; row >= 0; row--) {
 			if (board.tiles[row][col] == 0) {
 				console.log(player);
 				board.tiles[row][col] = player;
 				board.turn++;
+
+				//check for game over conditions
 				board.checkWin(int(player), int(row), int(col));
 				board.isTie();
 				break;
 			}
 		}
 
+		// Prepare for the end or the next turn
 		if (board.over) {
 			board.gameOver(player);
 		} else if (player == 2) {
@@ -428,13 +471,18 @@ board.dropPiece = (player, col) => {
 	}
 };
 
-//Buttons
+// This section handles the input from the users
+
+// Get an array of all the Buttons
 let buttons = document.querySelectorAll("button");
 
+// Function to be called by the either keypress or button
 function buttonOperation(bNum) {
+	// Input resets the game if the game is over
 	if (board.over) {
 		board.reset();
 	} else {
+		// Take the button that has been called and drop a piece of the current player in the selected col
 		console.log(
 			"Button ",
 			bNum + 1,
@@ -445,6 +493,7 @@ function buttonOperation(bNum) {
 	}
 }
 
+// for all buttons set the callback function
 let i = 0;
 buttons.forEach((button) => {
 	button.addEventListener("click", (e) => {
@@ -452,6 +501,7 @@ buttons.forEach((button) => {
 	});
 });
 
+// Enable secondary input via keyboard numeric inputs
 document.onkeypress = (e) => {
 	let key = int(String.fromCharCode(e.which || e.keyCode));
 	if (!isNaN(key) && key && key <= board.cols) {
