@@ -1,2 +1,2 @@
 # JSConnect4
-A JavaScript Connect 4 game made for my EECS 368 Class
+A JavaScript Connect 4 game made for my my Programing Paradigms class
